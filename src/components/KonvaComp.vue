@@ -1,19 +1,21 @@
 <script setup>
 import Konva from "konva";
 import { ref, watch, shallowRef } from "vue";
+import { useStageHooks } from "./konvaHooks/stage";
 import { createRuler } from "./konvaHooks/konvaRuler";
+import { useBackgroundHooks } from "./konvaHooks/background";
 
 const props = withDefaults(defineProps(), {
   stageWidth: 500,
   stageHeight: 300,
 });
 
-const container = ref(null);
+const containerEl = ref(null);
 const containerLayer = shallowRef(null);
 watch(
-  () => container.value,
+  () => containerEl.value,
   () => {
-    if (container.value !== null) {
+    if (containerEl.value !== null) {
       initCanvas();
     }
   }
@@ -27,19 +29,11 @@ const initCanvas = () => {
   const offsetX = rulerWidth || 0;
   const offsetY = rulerHeight || 0;
 
-  const stage = new Konva.Stage({
-    container: container.value, // id of container <div>
-    width: stageWidth,
-    height: stageHeight,
-    draggable: false, // 只设置stage的draggable，可以拖动的是整个画布
-    offsetX: -offsetX, // 设置偏移量，刻度不占位置
-    offsetY: -offsetY,
-  });
-
-  //创建层 layer
-  containerLayer.value = new Konva.Layer({
-    id: "containerLayerId",
-    draggable: true, // 只设置layer的draggable，可以拖动的是整个layer
+  const stage = useStageHooks({ containerEl, containerLayer }).createStage({
+    stageWidth,
+    stageHeight,
+    offsetX,
+    offsetY,
   });
 
   const rulerLayer = createRuler({
@@ -82,37 +76,10 @@ const initCanvas = () => {
 };
 
 const loading = ref(false);
-const imageURL =
-  "https://test204.rd.chn-das.com/oss/business/t6975983572026373/iwm/stationMap/2023-07-26/地图20230726-162326DxTr1Dh-EmG88-ahPMe2gzli5zeyAhA6KFCO_7Clr0.jpg";
-const uploadBackground = () => {
-  console.log(hasBackground());
-  if (!containerLayer.value || hasBackground()) return;
-  console.log(123);
-  loading.value = true;
-  // 方法一
-  Konva.Image.fromURL(
-    imageURL,
-    function (image) {
-      image.setAttrs({
-        id: "BackgroundImage",
-      });
-      containerLayer.value.add(image);
-      loading.value = false;
-    },
-    () => {
-      console.log("onError");
-    }
-  );
-};
-const hasBackground = () => {
-  return containerLayer.value.find("#BackgroundImage").length > 0
-    ? true
-    : false;
-};
+const { uploadBackground, changeBackground, clearBackground } =
+  useBackgroundHooks(containerLayer, loading);
 
-const changeBackground = () => {};
-const clearBackground = () => {};
-const dropStart = () => {};
+const dragstart = (ev, item) => {};
 const changeNode = () => {};
 const getPos = () => {};
 </script>
@@ -120,19 +87,37 @@ const getPos = () => {};
 <template>
   <div class="options">
     <div class="bg">
-      <button @click="uploadBackground">上传背景图</button>
-      <button @click="changeBackground">替换背景图</button>
+      <button
+        @click="
+          uploadBackground(
+            'https://test204.rd.chn-das.com/oss/business/t6975983572026373/iwm/stationMap/2023-07-26/地图20230726-162326DxTr1Dh-EmG88-ahPMe2gzli5zeyAhA6KFCO_7Clr0.jpg'
+          )
+        "
+      >
+        上传背景图
+      </button>
+      <button
+        @click="
+          changeBackground(
+            'http://192.168.100.204/oss/business/t6975983572026373/iwm/stationMap/2023-07-25/2-3-2答题-填字题20230725-193819gHagRNU-BSLhxPpMHg27B6DaC9Y0ix5U-wPop8ebUI.png'
+          )
+        "
+      >
+        替换背景图
+      </button>
       <button @click="clearBackground">删除画布</button>
     </div>
     <div class="node">
-      <button @click="dropStart">拖我拖我</button>
+      <button @dragstart="(e) => dragstart(e, item)" :draggable="true">
+        拖我拖我
+      </button>
       <button @click="changeNode">替换节点</button>
       <button @click="getPos">点击获取坐标</button>
     </div>
   </div>
   <div
     class="konva-box"
-    ref="container"
+    ref="containerEl"
     id="container"
     :class="{ loading: loading }"
   ></div>
