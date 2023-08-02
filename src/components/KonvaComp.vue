@@ -1,5 +1,4 @@
 <script setup>
-import Konva from "konva";
 import { ref, watch, shallowRef } from "vue";
 import { useStageHooks } from "./konvaHooks/stage";
 import { createRuler } from "./konvaHooks/konvaRuler";
@@ -68,8 +67,10 @@ const { createNode, getAbsolutePositionForStage } = useCreateNodeHooks({
   dropNode,
 });
 
+let count = 0;
 const dragstart = (ev, item) => {
   const node = createNode({
+    id: ++count,
     width: 20,
     height: 20,
     fill: "pink",
@@ -80,7 +81,10 @@ const dragstart = (ev, item) => {
   });
 };
 const changeNode = () => {};
-const getPos = () => {};
+const setPos = () => {
+  dropNode.value.x(100);
+  dropNode.value.y(100);
+};
 </script>
 
 <template>
@@ -111,7 +115,7 @@ const getPos = () => {};
         拖我拖我
       </button>
       <button @click="changeNode">替换节点</button>
-      <button @click="getPos">点击获取坐标</button>
+      <button @click="setPos">修改图标位置</button>
     </div>
   </div>
   <div
