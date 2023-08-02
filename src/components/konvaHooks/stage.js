@@ -1,9 +1,9 @@
 import Konva from "konva";
 import { ref, watch } from "vue";
 
-export const useStageHooks = ({ containerEl, containerLayer }) =>{
+export const useStageHooks = ({ containerEl, containerLayer, offsetX, offsetY, dropNode }) =>{
 
-  const createStage = ({stageWidth, stageHeight, offsetX, offsetY}) => {
+  const createStage = ({stageWidth, stageHeight}) => {
 
     // 创建舞台
     const stage = new Konva.Stage({
@@ -27,24 +27,21 @@ export const useStageHooks = ({ containerEl, containerLayer }) =>{
     return stage
   }
 
+  // konva不支持drop和drag Dom 到stage上，只能通过原生事件监听: https://konvajs.org/docs/sandbox/Drop_DOM_Element.html#sidebar
   const addStageEvent = (stage) => {
     containerEl.value.addEventListener("dragover", (e) => {
       e.preventDefault();
-      console.log("拖拽1");
     });
     containerEl.value.addEventListener("drop", (e) => {
       e.preventDefault();
       stage.setPointersPositions(e);
-      const rect2 = new Konva.Rect({
-        width: 100,
-        height: 100,
-        fill: "pink",
-        draggable: true
-      });
-      containerLayer.value.add(rect2)
-      console.log(stage.getPointerPosition(), rect2.getAbsolutePosition(stage))
-      rect2.position(stage.getPointerPosition())
-      console.log("拖拽2");
+      containerLayer.value.add(dropNode.value)
+      const originPos = stage.getPointerPosition()
+      const absolutePointerPos = {
+        x: originPos.x - offsetX,
+        y: originPos.y - offsetY
+      }
+      dropNode.value.position(absolutePointerPos)
     });
   }
 

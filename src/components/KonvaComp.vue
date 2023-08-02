@@ -4,6 +4,7 @@ import { ref, watch, shallowRef } from "vue";
 import { useStageHooks } from "./konvaHooks/stage";
 import { createRuler } from "./konvaHooks/konvaRuler";
 import { useBackgroundHooks } from "./konvaHooks/background";
+import { useCreateNodeHooks } from "./konvaHooks/createNode";
 
 const props = withDefaults(defineProps(), {
   stageWidth: 500,
@@ -12,6 +13,8 @@ const props = withDefaults(defineProps(), {
 
 const containerEl = ref(null);
 const containerLayer = shallowRef(null);
+const konvaStage = shallowRef(null);
+const dropNode = shallowRef(null); // 当前拖拽的节点
 watch(
   () => containerEl.value,
   () => {
@@ -29,11 +32,15 @@ const initCanvas = () => {
   const offsetX = rulerWidth || 0;
   const offsetY = rulerHeight || 0;
 
-  const stage = useStageHooks({ containerEl, containerLayer }).createStage({
-    stageWidth,
-    stageHeight,
+  konvaStage.value = useStageHooks({
+    containerEl,
+    containerLayer,
     offsetX,
     offsetY,
+    dropNode, // 当前拖拽的节点
+  }).createStage({
+    stageWidth,
+    stageHeight,
   });
 
   const rulerLayer = createRuler({
@@ -48,38 +55,30 @@ const initCanvas = () => {
     fontSize: 10,
   });
 
-  // const rect = new Konva.Rect({
-  //   x: 10,
-  //   y: 10,
-  //   width: 100,
-  //   height: 100,
-  //   fill: "blue",
-  // });
-  // const rect2 = new Konva.Circle({
-  //   x: 200,
-  //   y: 100,
-  //   width: 100,
-  //   height: 100,
-  //   fill: "pink",
-  // });
-  // rect2.on("click", function () {
-  //   console.log(rect2.getAbsolutePosition(stage));
-  // });
-  // rect.on("click", function () {
-  //   console.log(rect.getAbsolutePosition(stage));
-  // });
-  // containerLayer.value.add(rect);
-  // containerLayer.value.add(rect2);
-
-  stage.add(containerLayer.value); //将层添加至舞台
-  stage.add(rulerLayer);
+  konvaStage.value.add(containerLayer.value); //将层添加至舞台
+  konvaStage.value.add(rulerLayer);
 };
 
 const loading = ref(false);
 const { uploadBackground, changeBackground, clearBackground } =
   useBackgroundHooks(containerLayer, loading);
 
-const dragstart = (ev, item) => {};
+const { createNode, getAbsolutePositionForStage } = useCreateNodeHooks({
+  konvaStage,
+  dropNode,
+});
+
+const dragstart = (ev, item) => {
+  const node = createNode({
+    width: 20,
+    height: 20,
+    fill: "pink",
+    draggable: true,
+  });
+  node.on("click", () => {
+    console.log(getAbsolutePositionForStage(node));
+  });
+};
 const changeNode = () => {};
 const getPos = () => {};
 </script>
