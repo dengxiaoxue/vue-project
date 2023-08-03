@@ -39,11 +39,12 @@ export const useStageHooks = ({
     containerEl.value.addEventListener("drop", (e) => {
       e.preventDefault();
       konvaStage.value.setPointersPositions(e);
+      const res = containerLayer.value.getAbsolutePosition(konvaStage.value);
       containerLayer.value.add(dropNode.value);
       const originPos = konvaStage.value.getPointerPosition();
       const absolutePointerPos = {
-        x: originPos.x - offsetX,
-        y: originPos.y - offsetY,
+        x: originPos.x - offsetX - res.x,
+        y: originPos.y - offsetY - res.y,
       };
       dropNode.value.position(absolutePointerPos);
     });
