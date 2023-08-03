@@ -1,8 +1,8 @@
 import Konva from "konva";
 import { ref, watch } from "vue";
 
-export const useBackgroundHooks = (containerLayer, loading) =>{
-  let BackgroundImageObject = null
+export const useBackgroundHooks = (containerLayer, loading) => {
+  let BackgroundImageObject: any = null;
 
   const uploadBackground = (imageURL) => {
     if (!containerLayer.value || isUploadBackground()) return;
@@ -13,10 +13,10 @@ export const useBackgroundHooks = (containerLayer, loading) =>{
       function (image) {
         image.setAttrs({
           id: "BackgroundImage",
-          src: imageURL
+          src: imageURL,
         });
         containerLayer.value.add(image);
-        BackgroundImageObject = image
+        BackgroundImageObject = image;
         loading.value = false;
       },
       () => {
@@ -26,27 +26,31 @@ export const useBackgroundHooks = (containerLayer, loading) =>{
   };
 
   const changeBackground = (imageURL) => {
-    if (!isUploadBackground()) return
+    if (!isUploadBackground()) return;
     loading.value = true;
-    BackgroundImageObject.attrs.src = imageURL
-    const newImage = new Image()
-    newImage.src = imageURL
+    BackgroundImageObject.attrs.src = imageURL;
+    const newImage = new Image();
+    newImage.src = imageURL;
     newImage.onload = () => {
-      BackgroundImageObject.image(newImage)
+      BackgroundImageObject.image(newImage);
       loading.value = false;
-    }
+    };
   };
 
   const clearBackground = () => {
-    if ( !isUploadBackground()) return
-    BackgroundImageObject.destroy()
-    BackgroundImageObject = null
+    if (!isUploadBackground()) return;
+    BackgroundImageObject.destroy();
+    BackgroundImageObject = null;
   };
-  
 
   const isUploadBackground = () => {
     // containerLayer.value.find("#BackgroundImage").length > 0
     return BackgroundImageObject ? true : false;
   };
-  return { uploadBackground, isUploadBackground, changeBackground, clearBackground }
-}
+  return {
+    uploadBackground,
+    isUploadBackground,
+    changeBackground,
+    clearBackground,
+  };
+};

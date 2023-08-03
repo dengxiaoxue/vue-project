@@ -4,6 +4,7 @@ import { useStageHooks } from "./konvaHooks/stage";
 import { createRuler } from "./konvaHooks/konvaRuler";
 import { useBackgroundHooks } from "./konvaHooks/background";
 import { useCreateNodeHooks } from "./konvaHooks/createNode";
+import { useLoadJSONHooks } from "./konvaHooks/loadJson";
 
 const props = withDefaults(defineProps(), {
   stageWidth: 500,
@@ -12,6 +13,7 @@ const props = withDefaults(defineProps(), {
 
 const containerEl = ref(null);
 const containerLayer = shallowRef(null);
+const rulerLayer = shallowRef(null);
 const konvaStage = shallowRef(null);
 const dropNode = shallowRef(null); // 当前拖拽的节点
 watch(
@@ -31,18 +33,19 @@ const initCanvas = () => {
   const offsetX = rulerWidth || 0;
   const offsetY = rulerHeight || 0;
 
-  konvaStage.value = useStageHooks({
+  useStageHooks({
     containerEl,
     containerLayer,
     offsetX,
     offsetY,
     dropNode, // 当前拖拽的节点
+    konvaStage,
   }).createStage({
     stageWidth,
     stageHeight,
   });
 
-  const rulerLayer = createRuler({
+  rulerLayer.value = createRuler({
     stageWidth,
     stageHeight,
     rulerWidth,
@@ -55,7 +58,7 @@ const initCanvas = () => {
   });
 
   konvaStage.value.add(containerLayer.value); //将层添加至舞台
-  konvaStage.value.add(rulerLayer);
+  konvaStage.value.add(rulerLayer.value);
 };
 
 const loading = ref(false);
@@ -67,10 +70,17 @@ const { createNode, getAbsolutePositionForStage } = useCreateNodeHooks({
   dropNode,
 });
 
+const { toJSON, loadJSON } = useLoadJSONHooks({
+  konvaStage,
+  containerEl,
+  containerLayer,
+  rulerLayer,
+});
+
 let count = 0;
 const dragstart = (ev, item) => {
   const node = createNode({
-    id: ++count,
+    id: count++ + "",
     width: 20,
     height: 20,
     fill: "pink",
@@ -85,6 +95,22 @@ const setPos = () => {
   dropNode.value.x(100);
   dropNode.value.y(100);
 };
+
+let json = "";
+const ToJSON = () => {
+  json = toJSON();
+};
+const LoadJSON = async () => {
+  loading.value = true;
+  await loadJSON(json);
+  loading.value = false;
+};
+
+defineExpose({
+  uploadBackground,
+  changeBackground,
+  clearBackground,
+});
 </script>
 
 <template>
@@ -116,6 +142,10 @@ const setPos = () => {
       </button>
       <button @click="changeNode">替换节点</button>
       <button @click="setPos">修改图标位置</button>
+    </div>
+    <div class="node">
+      <button @click="ToJSON">序列化</button>
+      <button @click="LoadJSON">反序列化</button>
     </div>
   </div>
   <div
