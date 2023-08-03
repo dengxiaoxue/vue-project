@@ -65,7 +65,7 @@ const initCanvas = () => {
 
 const loading = ref(false);
 const { uploadBackground, changeBackground, clearBackground } =
-  useBackgroundHooks(containerLayer, loading);
+  useBackgroundHooks(containerLayer, loading, konvaStage, initCanvas);
 
 const { createNode, getAbsolutePositionForStage } = useCreateNodeHooks({
   konvaStage,

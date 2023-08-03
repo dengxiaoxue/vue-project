@@ -1,8 +1,11 @@
 import Konva from "konva";
 
-export const useBackgroundHooks = (containerLayer, loading) => {
-  let BackgroundImageObject: any = null;
-
+export const useBackgroundHooks = (
+  containerLayer,
+  loading,
+  konvaStage,
+  initCanvas
+) => {
   const uploadBackground = (imageURL) => {
     if (!containerLayer.value || isUploadBackground()) return;
     loading.value = true;
@@ -15,7 +18,6 @@ export const useBackgroundHooks = (containerLayer, loading) => {
           src: imageURL,
         });
         containerLayer.value.add(image);
-        BackgroundImageObject = image;
         loading.value = false;
       },
       () => {
@@ -27,24 +29,26 @@ export const useBackgroundHooks = (containerLayer, loading) => {
   const changeBackground = (imageURL) => {
     if (!isUploadBackground()) return;
     loading.value = true;
-    BackgroundImageObject.attrs.src = imageURL;
+
+    const imgObject = containerLayer.value.find("#BackgroundImage")[0];
+    imgObject.attrs.src = imageURL;
+
     const newImage = new Image();
     newImage.src = imageURL;
     newImage.onload = () => {
-      BackgroundImageObject.image(newImage);
+      imgObject.image(newImage);
       loading.value = false;
     };
   };
 
   const clearBackground = () => {
     if (!isUploadBackground()) return;
-    BackgroundImageObject.destroy();
-    BackgroundImageObject = null;
+    konvaStage.value.remove();
+    initCanvas();
   };
 
   const isUploadBackground = () => {
-    // containerLayer.value.find("#BackgroundImage").length > 0
-    return BackgroundImageObject ? true : false;
+    return containerLayer.value.find("#BackgroundImage").length > 0;
   };
   return {
     uploadBackground,
