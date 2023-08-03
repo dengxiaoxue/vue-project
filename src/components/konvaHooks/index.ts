@@ -3,6 +3,7 @@ import { createRuler } from "./konvaRuler";
 import { useBackgroundHooks } from "./background";
 import { useCreateNodeHooks } from "./createNode";
 import { useLoadJSONHooks } from "./loadJson";
+import { useTransformHooks } from "./transform";
 
 export {
   useStageHooks,
@@ -10,4 +11,5 @@ export {
   useBackgroundHooks,
   useCreateNodeHooks,
   useLoadJSONHooks,
+  useTransformHooks,
 };

@@ -6,6 +6,7 @@ import {
   useBackgroundHooks,
   useCreateNodeHooks,
   useLoadJSONHooks,
+  useTransformHooks,
 } from "./konvaHooks/index";
 
 const props = withDefaults(defineProps(), {
@@ -44,6 +45,11 @@ const { createStage, zoom } = useStageHooks({
   stageWidth,
   stageHeight,
 });
+const { addTransformer } = useTransformHooks({
+  konvaStage,
+  containerEl,
+  containerLayer,
+});
 
 const initCanvas = () => {
   createStage();
@@ -81,6 +87,7 @@ const dragstart = (ev, item) => {
   });
   node.on("click", () => {
     console.log(getAbsolutePositionForStage(node));
+    addTransformer();
   });
 };
 const changeNode = () => {};
