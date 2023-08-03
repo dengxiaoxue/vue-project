@@ -7,8 +7,11 @@ export const useStageHooks = ({
   offsetY,
   dropNode,
   konvaStage,
+  rulerLayer,
+  stageWidth,
+  stageHeight,
 }) => {
-  const createStage = ({ stageWidth, stageHeight }) => {
+  const createStage = () => {
     // 创建舞台
     konvaStage.value = new Konva.Stage({
       container: containerEl.value, // id of container <div>
@@ -62,6 +65,13 @@ export const useStageHooks = ({
     if (type === "in") newScale = oldScale - radio;
     if (type === "out") newScale = oldScale + radio;
     konvaStage.value?.scale({ x: newScale, y: newScale });
+    if (rulerLayer.value) {
+      rulerLayer.value = rulerLayer.value.$update({
+        stageWidth: stageWidth / newScale,
+        stageHeight: stageHeight / newScale,
+      });
+      konvaStage.value.add(rulerLayer.value);
+    }
   };
 
   return { createStage, zoom };

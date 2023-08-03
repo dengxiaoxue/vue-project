@@ -40,25 +40,15 @@ const { createStage, zoom } = useStageHooks({
   offsetY,
   dropNode, // 当前拖拽的节点
   konvaStage,
+  rulerLayer,
+  stageWidth,
+  stageHeight,
 });
 
 const initCanvas = () => {
-  createStage({
-    stageWidth,
-    stageHeight,
-  });
+  createStage();
 
-  rulerLayer.value = createRuler({
-    stageWidth,
-    stageHeight,
-    rulerWidth,
-    rulerHeight,
-    precision: 10,
-    backgroundColor: "#f0f0f0",
-    lineColor: "#ccc",
-    textColor: "#212121",
-    fontSize: 10,
-  });
+  rulerLayer.value = createRuler();
 
   konvaStage.value.add(containerLayer.value); //将层添加至舞台
   konvaStage.value.add(rulerLayer.value);

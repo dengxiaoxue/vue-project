@@ -1,18 +1,19 @@
 import Konva from "konva";
 
-export const createRuler = ({
-  stageWidth = 500,
-  stageHeight = 500,
-  rulerWidth = 20,
-  rulerHeight = 20,
-  precision = 10,
-  backgroundColor = "#f0f0f0",
-  lineColor = "#ccc",
-  textColor = "#F56C6C",
-  fontSize = 10,
-  opacity = 0.6,
-}) => {
-  const rulerLayer = new Konva.Layer({
+export const createRuler = (rulerConfig) => {
+  const {
+    stageWidth = 500,
+    stageHeight = 500,
+    rulerWidth = 20,
+    rulerHeight = 20,
+    precision = 10,
+    backgroundColor = "#f0f0f0",
+    lineColor = "#ccc",
+    textColor = "#212121",
+    fontSize = 10,
+    opacity = 0.6,
+  } = rulerConfig || {};
+  const rulerLayer: any = new Konva.Layer({
     id: "rulerLayerId",
     draggable: false,
   });
@@ -95,5 +96,10 @@ export const createRuler = ({
       );
     }
   }
+
+  rulerLayer.$update = (config) => {
+    rulerLayer.remove();
+    return createRuler(config);
+  };
   return rulerLayer;
 };
