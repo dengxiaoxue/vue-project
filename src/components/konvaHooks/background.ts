@@ -1,5 +1,4 @@
 import Konva from "konva";
-import { ref, watch } from "vue";
 
 export const useBackgroundHooks = (containerLayer, loading) => {
   let BackgroundImageObject: any = null;

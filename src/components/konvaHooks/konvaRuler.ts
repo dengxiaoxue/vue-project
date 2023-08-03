@@ -1,21 +1,19 @@
 import Konva from "konva";
-import { ref, watch } from "vue";
 
 export const createRuler = ({
   stageWidth = 500,
-  stageHeight = 500, 
+  stageHeight = 500,
   rulerWidth = 20,
-  rulerHeight = 20, 
-  precision=10, 
-  backgroundColor="#f0f0f0", 
-  lineColor="#ccc", 
-  textColor="#F56C6C", 
-  fontSize=10, 
-  opacity = 0.6
+  rulerHeight = 20,
+  precision = 10,
+  backgroundColor = "#f0f0f0",
+  lineColor = "#ccc",
+  textColor = "#F56C6C",
+  fontSize = 10,
+  opacity = 0.6,
 }) => {
-  
   const rulerLayer = new Konva.Layer({
-    id: 'rulerLayerId',
+    id: "rulerLayerId",
     draggable: false,
   });
 
@@ -97,5 +95,5 @@ export const createRuler = ({
       );
     }
   }
-  return rulerLayer
-}
+  return rulerLayer;
+};

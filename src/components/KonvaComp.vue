@@ -1,10 +1,12 @@
 <script setup>
 import { ref, watch, shallowRef } from "vue";
-import { useStageHooks } from "./konvaHooks/stage";
-import { createRuler } from "./konvaHooks/konvaRuler";
-import { useBackgroundHooks } from "./konvaHooks/background";
-import { useCreateNodeHooks } from "./konvaHooks/createNode";
-import { useLoadJSONHooks } from "./konvaHooks/loadJson";
+import {
+  useStageHooks,
+  createRuler,
+  useBackgroundHooks,
+  useCreateNodeHooks,
+  useLoadJSONHooks,
+} from "./konvaHooks/index";
 
 const props = withDefaults(defineProps(), {
   stageWidth: 500,
