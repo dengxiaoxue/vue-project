@@ -2,7 +2,7 @@ import Konva from "konva";
 
 export const useCreateNodeHooks = ({ konvaStage, dropNode }) => {
   const createNode = (congig) => {
-    dropNode.value = new Konva.Circle({ ...congig });
+    dropNode.value = new Konva.Rect({ ...congig });
     return dropNode.value;
   };
 

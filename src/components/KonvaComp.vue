@@ -27,22 +27,23 @@ watch(
   }
 );
 
-const initCanvas = () => {
-  const stageWidth = 500;
-  const stageHeight = 300;
-  const rulerHeight = 20; // 刻度高
-  const rulerWidth = 20;
-  const offsetX = rulerWidth || 0;
-  const offsetY = rulerHeight || 0;
+const stageWidth = 500;
+const stageHeight = 300;
+const rulerHeight = 20; // 刻度高
+const rulerWidth = 20;
+const offsetX = rulerWidth || 0;
+const offsetY = rulerHeight || 0;
+const { createStage, zoom } = useStageHooks({
+  containerEl,
+  containerLayer,
+  offsetX,
+  offsetY,
+  dropNode, // 当前拖拽的节点
+  konvaStage,
+});
 
-  useStageHooks({
-    containerEl,
-    containerLayer,
-    offsetX,
-    offsetY,
-    dropNode, // 当前拖拽的节点
-    konvaStage,
-  }).createStage({
+const initCanvas = () => {
+  createStage({
     stageWidth,
     stageHeight,
   });
@@ -98,6 +99,7 @@ const setPos = () => {
   dropNode.value.y(100);
 };
 
+// 序列化
 let json = "";
 const ToJSON = () => {
   json = toJSON();
@@ -107,6 +109,9 @@ const LoadJSON = async () => {
   await loadJSON(json);
   loading.value = false;
 };
+
+// 放大缩小重置
+const zoomStage = (type) => zoom(type);
 
 defineExpose({
   uploadBackground,
@@ -139,15 +144,20 @@ defineExpose({
       <button @click="clearBackground">删除画布</button>
     </div>
     <div class="node">
+      <button @click="ToJSON">序列化</button>
+      <button @click="LoadJSON">反序列化</button>
+    </div>
+    <div class="stage">
+      <button @click="zoomStage('out')">放大舞台</button>
+      <button @click="zoomStage('in')">缩小舞台</button>
+      <button @click="zoomStage">重置舞台</button>
+    </div>
+    <div class="node">
       <button @dragstart="(e) => dragstart(e, item)" :draggable="true">
         拖我拖我
       </button>
       <button @click="changeNode">替换节点</button>
       <button @click="setPos">修改图标位置</button>
-    </div>
-    <div class="node">
-      <button @click="ToJSON">序列化</button>
-      <button @click="LoadJSON">反序列化</button>
     </div>
   </div>
   <div

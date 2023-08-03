@@ -50,5 +50,19 @@ export const useStageHooks = ({
     });
   };
 
-  return { createStage };
+  const zoom = (
+    /** 缩放类型：in表示缩小 out表示放大 reset，不填则表示还原 */
+    type?: "in" | "out",
+    /** 缩放系数：默认0.1 */
+    radio?: number
+  ) => {
+    const oldScale = konvaStage.value?.scaleX() || 1;
+    if (radio === undefined) radio = 0.1;
+    let newScale = 1;
+    if (type === "in") newScale = oldScale - radio;
+    if (type === "out") newScale = oldScale + radio;
+    konvaStage.value?.scale({ x: newScale, y: newScale });
+  };
+
+  return { createStage, zoom };
 };
