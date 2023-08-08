@@ -16,6 +16,8 @@ export const useBackgroundHooks = (
         image.setAttrs({
           id: "BackgroundImage",
           src: imageURL,
+          width: konvaStage.value.width(),
+          height: konvaStage.value.height(),
         });
         containerLayer.value.add(image);
         loading.value = false;
