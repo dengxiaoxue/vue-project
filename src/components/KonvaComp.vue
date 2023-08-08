@@ -84,6 +84,8 @@ const dragstart = (ev, item) => {
     height: 20,
     fill: "pink",
     draggable: true,
+    offsetX: 10, // 偏移 (offset) 叫做中心 (center)
+    offsetY: 10,
   });
   node.on("click", () => {
     console.log(getAbsolutePositionForStage(node));

@@ -12,7 +12,7 @@ export const useTransformHooks = ({
       anchorSize: 5,
       borderStroke: "green",
       // borderDash: [3, 3],
-      centeredScaling: true,
+      centeredScaling: true, // 基于中心缩放
       rotationSnaps: [0, 90, 180, 270], // 旋转吸附
     });
     containerLayer.value.add(tr);
