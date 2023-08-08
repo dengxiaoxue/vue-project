@@ -91,6 +91,12 @@ const dragstart = (ev, item) => {
     console.log(getAbsolutePositionForStage(node));
     addTransformer();
   });
+  node.on("mouseenter", function () {
+    konvaStage.value.container().style.cursor = "move";
+  });
+  node.on("mouseleave", function () {
+    konvaStage.value.container().style.cursor = "default";
+  });
 };
 const changeNode = () => {};
 const setPos = () => {
