@@ -5,7 +5,7 @@ import KonvaComp from "./components/KonvaComp.vue";
 
 <template>
   <div class="wrapper">
-    <KonvaComp />
+    <KonvaComp ruler />
   </div>
 </template>
 

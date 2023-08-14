@@ -1,6 +1,6 @@
 import Konva from "konva";
 
-export const createRuler = (rulerConfig) => {
+export const createRuler = (rulerConfig?: any) => {
   const {
     stageWidth = 500,
     stageHeight = 500,

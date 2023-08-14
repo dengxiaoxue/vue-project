@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { ref, watch, shallowRef } from "vue";
 import {
   useStageHooks,
@@ -8,17 +8,21 @@ import {
   useLoadJSONHooks,
   useTransformHooks,
 } from "./konvaHooks/index";
+import type { Props } from "./konvaHooks/type.d";
 
-const props = withDefaults(defineProps(), {
+const props = withDefaults(defineProps<Props>(), {
   stageWidth: 500,
   stageHeight: 300,
+  ruler: false,
+  rulerHeight: 20,
+  rulerWidth: 20,
 });
 
-const containerEl = ref(null);
-const containerLayer = shallowRef(null);
-const rulerLayer = shallowRef(null);
-const konvaStage = shallowRef(null);
-const dropNode = shallowRef(null); // 当前拖拽的节点
+const containerEl = ref<any>(null);
+const containerLayer = shallowRef<any>(null);
+const rulerLayer = shallowRef<any>(null);
+const konvaStage = shallowRef<any>(null);
+const dropNode = shallowRef<any>(null); // 当前拖拽的节点
 watch(
   () => containerEl.value,
   () => {
@@ -28,22 +32,16 @@ watch(
   }
 );
 
-const stageWidth = 500;
-const stageHeight = 300;
-const rulerHeight = 20; // 刻度高
-const rulerWidth = 20;
-const offsetX = rulerWidth || 0;
-const offsetY = rulerHeight || 0;
 const { createStage, zoom } = useStageHooks({
   containerEl,
   containerLayer,
-  offsetX,
-  offsetY,
-  dropNode, // 当前拖拽的节点
-  konvaStage,
   rulerLayer,
-  stageWidth,
-  stageHeight,
+  konvaStage,
+  dropNode,
+  offsetX: props.rulerWidth || 0,
+  offsetY: props.rulerHeight || 0,
+  stageWidth: props.stageWidth,
+  stageHeight: props.stageHeight,
 });
 const { addTransformer } = useTransformHooks({
   konvaStage,
@@ -54,10 +52,13 @@ const { addTransformer } = useTransformHooks({
 const initCanvas = () => {
   createStage();
 
-  rulerLayer.value = createRuler();
-
   konvaStage.value.add(containerLayer.value); //将层添加至舞台
-  konvaStage.value.add(rulerLayer.value);
+
+  // 最后添加标尺，保证标尺在最上层
+  if (props.ruler) {
+    rulerLayer.value = createRuler();
+    konvaStage.value.add(rulerLayer.value);
+  }
 };
 
 const loading = ref(false);
@@ -77,7 +78,7 @@ const { toJSON, loadJSON } = useLoadJSONHooks({
 });
 
 let count = 0;
-const dragstart = (ev, item) => {
+const dragstart = (ev) => {
   const node = createNode({
     id: count++ + "",
     width: 20,
@@ -158,7 +159,7 @@ defineExpose({
       <button @click="zoomStage">重置舞台</button>
     </div>
     <div class="node">
-      <button @dragstart="(e) => dragstart(e, item)" :draggable="true">
+      <button @dragstart="(e) => dragstart(e)" :draggable="true">
         拖我拖我
       </button>
       <button @click="changeNode">替换节点</button>

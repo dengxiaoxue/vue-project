@@ -76,3 +76,38 @@ export const useStageHooks = ({
 
   return { createStage, zoom };
 };
+
+export const createStage = (canvas, config) => {
+  // 创建舞台
+  canvas = new Konva.Stage(config);
+
+  // 添加舞台事件
+  // addStageEvent();
+
+  //创建层 layer
+  const layer = new Konva.Layer({
+    id: "containerLayerId",
+    draggable: true, // 只设置layer的draggable，可以拖动的是整个layer
+  });
+
+  return { canvas, layer };
+};
+
+// konva不支持drop和drag Dom 到stage上，只能通过原生事件监听: https://konvajs.org/docs/sandbox/Drop_DOM_Element.html#sidebar
+// export const addStageEvent = () => {
+//   containerEl.value.addEventListener("dragover", (e) => {
+//     e.preventDefault();
+//   });
+//   containerEl.value.addEventListener("drop", (e) => {
+//     e.preventDefault();
+//     konvaStage.value.setPointersPositions(e);
+//     const res = containerLayer.value.getAbsolutePosition(konvaStage.value);
+//     containerLayer.value.add(dropNode.value);
+//     const originPos = konvaStage.value.getPointerPosition();
+//     const absolutePointerPos = {
+//       x: originPos.x - offsetX - res.x,
+//       y: originPos.y - offsetY - res.y,
+//     };
+//     dropNode.value.position(absolutePointerPos);
+//   });
+// };
