@@ -1,11 +1,12 @@
 <script setup>
-// import HelloWorld from "./components/HelloWorld.vue";
-import KonvaComp from "./components/KonvaComp.vue";
+import HelloWorld from "./components/HelloWorld.vue";
+// import KonvaComp from "./components/KonvaComp.vue";
 </script>
 
 <template>
   <div class="wrapper">
-    <KonvaComp ruler />
+    <!-- <KonvaComp ruler /> -->
+    <HelloWorld></HelloWorld>
   </div>
 </template>
 

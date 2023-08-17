@@ -2,7 +2,26 @@
 import { Graph } from "@antv/x6";
 import { Dnd } from "@antv/x6-plugin-dnd";
 import { Transform } from "@antv/x6-plugin-transform";
+import { Export } from "@antv/x6-plugin-export";
 import { ref, watch, shallowRef } from "vue";
+Graph.registerNode(
+  "custom-group-node",
+  {
+    inherit: "rect",
+    width: 100,
+    height: 40,
+    attrs: {
+      body: {
+        stroke: "#8f8f8f",
+        strokeWidth: 1,
+        fill: "#fff",
+        rx: 6,
+        ry: 6,
+      },
+    },
+  },
+  true
+);
 defineProps({
   msg: {
     type: String,
@@ -13,7 +32,9 @@ const container = ref();
 const graph = shallowRef();
 const dnd = ref();
 const pos = ref();
+const relativePos = ref();
 const parent = shallowRef();
+// const coverLayer = shallowRef();
 watch(
   () => container.value,
   () => {
@@ -27,6 +48,7 @@ const initGraph = () => {
     height: 600,
     background: true,
   });
+  graph.value.use(new Export());
   graph.value.drawBackground({
     color: "#f5f5f5",
     image: undefined,
@@ -35,6 +57,7 @@ const initGraph = () => {
     target: graph.value,
     // 自定义拖拽节点的样式
     getDragNode(node) {
+      return node;
       // 这里返回一个新的节点作为拖拽节点
       const res = graph.value.createNode({
         width: 20,
@@ -47,8 +70,7 @@ const initGraph = () => {
             stroke: "pink",
             width: 40,
             height: 40,
-            xlinkHref:
-              "data:image/jpeg;base64,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",
+            xlinkHref: "https://img5.sucaisucai.com/02/66/02566175_1.jpg",
           },
           label: {
             fontSize: 14,
@@ -64,22 +86,23 @@ const initGraph = () => {
       const { width, height } = node.size();
       // 返回一个新的节点作为实际放置到画布上的节点
       // 获取节点位置
-      const res = node.clone({ keepId: true }).size(width * 2, height * 2);
+      // const res = node.clone({ keepId: true }).size(width * 2, height * 2);
+      const res = node.clone({ keepId: true });
       parent.value.addChild(res);
       selectedId.value = res.id;
       selectedNode.value = res;
       return res;
-      // return graph.value.createNode({
-      //   width: 20,
-      //   height: 20,
-      //   shape: "rect",
-      //   attrs: {
-      //     body: {
-      //       fill: "#ccc",
-      //       stroke: "pink",
-      //     },
-      //   },
-      // });
+      return graph.value.createNode({
+        width: 20,
+        height: 20,
+        shape: "rect",
+        attrs: {
+          body: {
+            fill: "#ccc",
+            stroke: "pink",
+          },
+        },
+      });
     },
     // 拖拽结束时，验证节点是否可以放置到目标画布中
     validateNode(node) {
@@ -153,6 +176,25 @@ const uploadBackground = () => {
       },
     },
   });
+  // coverLayer.value = graph.value.addNode({
+  //   // x: 80,
+  //   // y: 40,
+  //   id: "coverLayer",
+  //   shape: "custom-group-node",
+  //   width: 240,
+  //   height: 240,
+  //   zIndex: 0,
+  //   // label: "Parent\n(try to move me)",
+  //   attrs: {
+  //     body: {
+  //       fill: "pink",
+  //       stroke: "#ccc",
+  //       fillOpacity: 0.1,
+  //       strokeOpacity: 0.1,
+  //     },
+  //   },
+  // });
+  // parent.value.addChild(coverLayer.value);
 };
 const clearBackgroud = () => {
   if (parent.value) {
@@ -181,13 +223,51 @@ function dragstart(e, data) {
     width: 100,
     height: 40,
     id: ++count,
+    shape: "image",
+    zIndex: 2,
+    attrs: {
+      image: {
+        fill: "#ccc",
+        stroke: "pink",
+        width: 40,
+        height: 40,
+        xlinkHref: "https://img5.sucaisucai.com/02/66/02566175_1.jpg",
+      },
+      label: {
+        fontSize: 14,
+        fill: "yellow",
+        text: "图片",
+      },
+    },
   });
   dnd.value.start(node, e);
+  console.log(node.getZIndex());
+}
+function dragstart2(e, data) {
+  // 该 node 为拖拽的节点，默认也是放置到画布上的节点，可以自定义任何属性
+  // 节点属性：https://developer.mozilla.org/zh-CN/docs/Web/SVG/Tutorial/Fills_and_Strokes
+  const cover = graph.value.createNode({
+    shape: "rect",
+    width: 100,
+    height: 40,
+    id: "cover",
+    attrs: {
+      body: {
+        fill: "pink",
+        stroke: "#ccc",
+        fillOpacity: 0.5,
+        strokeOpacity: 0.2,
+      },
+    },
+  });
+  dnd.value.start(cover, e);
+  console.log(cover.getZIndex());
 }
 const getNodePos = () => {
   if (!selectedNode.value) return;
   // 是否返回相对于父节点的相对位置，默认为 false 表示返回节点相对于画布的绝对位置。
   pos.value = selectedNode.value.position({ relative: false });
+  relativePos.value = selectedNode.value.position({ relative: true });
 };
 const setNodePos = () => {
   if (!selectedNode.value) return;
@@ -205,15 +285,21 @@ const updateNode = () => {
   // selectedNode.value.size(100, 100);
   // console.log(selectedNode.value.prop());
 };
-let json = null;
+let json = ref(null);
 const toJSON = () => {
-  json = graph.value.toJSON();
+  json.value = graph.value.toJSON();
+  console.log(json.value);
 };
 const fromJSON = () => {
-  graph.value.fromJSON(json);
+  graph.value.fromJSON(json.value);
   const nodes = graph.value.getNodes();
   nodes.forEach((item) => {
     if (item.id === "Background") parent.value = item;
+  });
+};
+const exportSVG = () => {
+  const res = graph.value.toSVG((svg) => {
+    console.log(svg);
   });
 };
 </script>
@@ -231,11 +317,16 @@ const fromJSON = () => {
   <div class="box">
     <button @click="toJSON">序列化</button>
     <button @click="fromJSON">反序列化</button>
+    <button @click="exportSVG">导出为svg</button>
   </div>
   <div id="container" ref="container"></div>
   <button @dragstart="(e) => dragstart(e, item)" :draggable="true">拖我</button>
-  <div>位置：{{ pos }}</div>
+  <button @dragstart="(e) => dragstart2(e, item)" :draggable="true">
+    覆盖图层
+  </button>
+  <div>位置：{{ pos }}-{{ relativePos }}</div>
   <div>当前id: {{ selectedId }}</div>
+  {{ json }}
 </template>
 
 <style scoped>

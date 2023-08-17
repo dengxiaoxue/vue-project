@@ -3,6 +3,7 @@ lockfileVersion: 5.4
 specifiers:
   '@antv/x6': ^2.13.1
   '@antv/x6-plugin-dnd': ^2.0.6
+  '@antv/x6-plugin-export': ^2.1.6
   '@antv/x6-plugin-snapline': ^2.1.7
   '@antv/x6-plugin-transform': ^2.1.7
   '@vitejs/plugin-vue': ^4.2.3
@@ -17,6 +18,7 @@ specifiers:
 dependencies:
   '@antv/x6': registry.npmmirror.com/@antv/x6/2.13.1
   '@antv/x6-plugin-dnd': registry.npmmirror.com/@antv/x6-plugin-dnd/2.0.6_@antv+x6@2.13.1
+  '@antv/x6-plugin-export': registry.npmmirror.com/@antv/x6-plugin-export/2.1.6_@antv+x6@2.13.1
   '@antv/x6-plugin-snapline': registry.npmmirror.com/@antv/x6-plugin-snapline/2.1.7_@antv+x6@2.13.1
   '@antv/x6-plugin-transform': registry.npmmirror.com/@antv/x6-plugin-transform/2.1.7_@antv+x6@2.13.1
   konva: registry.npmmirror.com/konva/9.2.0
@@ -62,6 +64,17 @@ packages:
     id: registry.npmmirror.com/@antv/x6-plugin-dnd/2.0.6
     name: '@antv/x6-plugin-dnd'
     version: 2.0.6
+    peerDependencies:
+      '@antv/x6': ^2.x
+    dependencies:
+      '@antv/x6': registry.npmmirror.com/@antv/x6/2.13.1
+    dev: false
+
+  registry.npmmirror.com/@antv/x6-plugin-export/2.1.6_@antv+x6@2.13.1:
+    resolution: {integrity: sha512-m0ukMmZhrFE5n7uCR43DVQBdiUfpjGN+vm1mc+6RTZdHK8pa6Mxr0RZztaxPy34YA4tli+bGY3ePslsNPfh6PQ==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@antv/x6-plugin-export/-/x6-plugin-export-2.1.6.tgz}
+    id: registry.npmmirror.com/@antv/x6-plugin-export/2.1.6
+    name: '@antv/x6-plugin-export'
+    version: 2.1.6
     peerDependencies:
       '@antv/x6': ^2.x
     dependencies:
