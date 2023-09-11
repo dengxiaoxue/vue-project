@@ -41,6 +41,65 @@ watch(
     if (container.value !== null) initGraph();
   }
 );
+const data = {
+  nodes: [
+    {
+      id: "node1",
+      shape: "rect",
+      x: 40,
+      y: 40,
+      width: 100,
+      height: 40,
+      label: "hello",
+      attrs: {
+        body: {
+          stroke: "#8f8f8f",
+          strokeWidth: 1,
+          fill: "#fff",
+          rx: 6,
+          ry: 6,
+        },
+      },
+    },
+    {
+      id: "node2",
+      shape: "rect",
+      x: 160,
+      y: 180,
+      width: 100,
+      height: 40,
+      label: "world",
+      attrs: {
+        body: {
+          stroke: "#8f8f8f",
+          strokeWidth: 1,
+          fill: "#fff",
+          rx: 6,
+          ry: 6,
+        },
+      },
+    },
+  ],
+  edges: [
+    {
+      shape: "edge",
+      source: "node1",
+      target: "node2",
+      label: "",
+      // 顶点
+      vertices: [
+        { x: 100, y: 200 },
+        { x: 300, y: 120 },
+      ],
+      attrs: {
+        line: {
+          stroke: "#8f8f8f",
+          strokeWidth: 1,
+        },
+      },
+    },
+  ],
+};
 const initGraph = () => {
   graph.value = new Graph({
     container: document.getElementById("container"),
@@ -126,7 +185,7 @@ const initGraph = () => {
   );
 
   initEvent();
-  graph.value.fromJSON({});
+  graph.value.fromJSON(data);
 };
 
 const initEvent = () => {
