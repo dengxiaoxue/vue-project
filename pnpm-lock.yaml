@@ -4,11 +4,11 @@ specifiers:
   '@antv/x6': ^2.13.1
   '@antv/x6-plugin-dnd': ^2.0.6
   '@antv/x6-plugin-export': ^2.1.6
-  '@antv/x6-plugin-snapline': ^2.1.7
   '@antv/x6-plugin-transform': ^2.1.7
   '@vitejs/plugin-vue': ^4.2.3
   '@vitejs/plugin-vue-jsx': ^3.0.1
   konva: ^9.2.0
+  lodash-es: ^4.17.21
   rollup-plugin-visualizer: ^5.9.2
   typescript: ^5.1.6
   vite: ^4.4.6
@@ -19,9 +19,9 @@ dependencies:
   '@antv/x6': registry.npmmirror.com/@antv/x6/2.13.1
   '@antv/x6-plugin-dnd': registry.npmmirror.com/@antv/x6-plugin-dnd/2.0.6_@antv+x6@2.13.1
   '@antv/x6-plugin-export': registry.npmmirror.com/@antv/x6-plugin-export/2.1.6_@antv+x6@2.13.1
-  '@antv/x6-plugin-snapline': registry.npmmirror.com/@antv/x6-plugin-snapline/2.1.7_@antv+x6@2.13.1
   '@antv/x6-plugin-transform': registry.npmmirror.com/@antv/x6-plugin-transform/2.1.7_@antv+x6@2.13.1
   konva: registry.npmmirror.com/konva/9.2.0
+  lodash-es: registry.npmmirror.com/lodash-es/4.17.21
   typescript: registry.npmmirror.com/typescript/5.1.6
   vue: registry.npmmirror.com/vue/3.3.4
 
@@ -75,17 +75,6 @@ packages:
     id: registry.npmmirror.com/@antv/x6-plugin-export/2.1.6
     name: '@antv/x6-plugin-export'
     version: 2.1.6
-    peerDependencies:
-      '@antv/x6': ^2.x
-    dependencies:
-      '@antv/x6': registry.npmmirror.com/@antv/x6/2.13.1
-    dev: false
-
-  registry.npmmirror.com/@antv/x6-plugin-snapline/2.1.7_@antv+x6@2.13.1:
-    resolution: {integrity: sha512-AsysoCb9vES0U2USNhEpYuO/W8I0aYfkhlbee5Kt4NYiMfQfZKQyqW/YjDVaS2pm38C1NKu1LdPVk/BBr4CasA==, registry: http://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@antv/x6-plugin-snapline/-/x6-plugin-snapline-2.1.7.tgz}
-    id: registry.npmmirror.com/@antv/x6-plugin-snapline/2.1.7
-    name: '@antv/x6-plugin-snapline'
-    version: 2.1.7
     peerDependencies:
       '@antv/x6': ^2.x
     dependencies:

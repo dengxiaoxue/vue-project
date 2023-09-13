@@ -17,7 +17,8 @@ import HelloWorld from "./components/HelloWorld.vue";
 }
 .wrapper {
   width: 100%;
-  height: 100%;
-  /* border: 1px solid red; */
+  height: 100vh;
+  border: 1px solid yellowgreen;
+  box-sizing: border-box;
 }
 </style>
